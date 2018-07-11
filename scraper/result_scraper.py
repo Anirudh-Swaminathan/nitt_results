@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import requests
+from warnings import catch_warnings, filterwarnings
 
 class ResultScraper(object):
     """Class for scraping results
@@ -31,12 +32,15 @@ class ResultScraper(object):
         headers["referer"] = """https://delta.nitt.edu/\
                 results/checkResult.html"""
         headers["host"] = "delta.nitt.edu"
-        r = requests.post(
-                "https://delta.nitt.edu/results/results.php",
-                headers=headers,
-                data=self.postData,
-                verify=False
-                )
+        # ignore warnings due to avoiding SSL certificate verification
+        with catch_warnings():
+            filterwarnings("ignore")
+            r = requests.post(
+                    "https://delta.nitt.edu/results/results.php",
+                    headers=headers,
+                    data=self.postData,
+                    verify=False
+                    )
         self.response = r.text
 
     def print_results(self):

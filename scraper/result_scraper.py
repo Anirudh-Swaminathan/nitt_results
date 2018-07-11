@@ -17,8 +17,17 @@ class ResultScraper(object):
         self.postData = postData
         self.response = None
 
-    def fetch_data(self):
-        """Function to fetch data using a post request"""
+    @staticmethod
+    def fetch_data(postData):
+        """Function to fetch data using a post request
+        
+        # Arguments
+            postData - dictionary
+                Data to be sent via POST request
+
+        # Returns
+            response - Response to the request
+        """
         headers = dict()
         headers["referer"] = """https://delta.nitt.edu/\
                 results/checkResult.html"""
@@ -26,11 +35,12 @@ class ResultScraper(object):
         r = requests.post(
                 "https://delta.nitt.edu/results/results.php",
                 headers=headers,
-                data=self.postData, verify=False
+                data=postData, verify=False
                 )
-        self.response = r.text
+        response = r.text
+        return response
 
     def print_results(self):
         """Function to print the data on the terminal"""
-        self.fetch_data()
+        self.response = fetch_data(self.postData)
         print("\n" + self.response)

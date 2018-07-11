@@ -2,7 +2,7 @@
 
 import requests
 
-class ResultScraper(Object):
+class ResultScraper(object):
     """Class for scraping results
     
     This class contains all the methods for scraping the delta results page
@@ -17,7 +17,7 @@ class ResultScraper(Object):
         self.postData = postData
         self.response = None
 
-    def fetchData(self):
+    def fetch_data(self):
         """Function to fetch data using a post request"""
         headers = dict()
         headers["referer"] = """https://delta.nitt.edu/\
@@ -29,3 +29,8 @@ class ResultScraper(Object):
                 data=self.postData, verify=False
                 )
         self.response = r.text
+
+    def print_results(self):
+        """Function to print the data on the terminal"""
+        self.fetch_data()
+        print("\n" + self.response)

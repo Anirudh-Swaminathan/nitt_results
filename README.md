@@ -13,7 +13,7 @@ The original site for checking results is [here](https://delta.nitt.edu/results/
 3. Change your directory to the root folder
 4. Run the following command
 ```python
-python scrape_it.py -r <your_roll_number> -p
+python scrape_it.py -r <your_roll_number>
 ```
 Enter your password in the hidden prompt and hit enter.
 

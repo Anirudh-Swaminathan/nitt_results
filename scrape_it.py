@@ -2,6 +2,7 @@
 
 from scraper import ResultScraper as RS
 from argparse import ArgumentParser
+from getpass import getpass
 
 def main():
     """main method"""
@@ -16,23 +17,28 @@ def main():
             type=str,
             required=True
             )
-    parser.add_argument(
-            "-p",
-            "--password",
-            dest="pwd",
-            help="Webmail or Octa Password",
-            type=str,
-            required=True
-            )
+    # parser.add_argument(
+    #         "-p",
+    #         "--password",
+    #         action='store_true',
+    #         dest="pwd",
+    #         help="Webmail or Octa Password",
+    #         )
     args = parser.parse_args()
-    if None in [args.uname, args.pwd]:
-        print("Please enter both roll number and password")
+    
+
+    if args.uname is None:
+        print("Please enter roll number")
     else:
-        data = dict()
-        data['uname'] = args.uname
-        data['pwd'] = args.pwd
-        rCls = RS(data)
-        rCls.print_results()
+        password = getpass()
+        if password is None:
+            print("Please enter roll number and password again")
+        else:
+            data = dict()
+            data['uname'] = args.uname
+            data['pwd'] = password
+            rCls = RS(data)
+            rCls.print_results()
 
 if __name__ == "__main__":
     main()

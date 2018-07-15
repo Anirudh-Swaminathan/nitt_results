@@ -17,26 +17,17 @@ def main():
             type=str,
             required=True
             )
-    # parser.add_argument(
-    #         "-p",
-    #         "--password",
-    #         action='store_true',
-    #         dest="pwd",
-    #         help="Webmail or Octa Password",
-    #         )
     args = parser.parse_args()
-    
-
     if args.uname is None:
         print("Please enter roll number")
     else:
-        password = getpass()
+        password = getpass(prompt="Webmail or Octa Password: ")
         if password is None:
             print("Please enter roll number and password again")
         else:
             data = dict()
-            data['uname'] = args.uname
-            data['pwd'] = password
+            data["uname"] = args.uname
+            data["pwd"] = password
             rCls = RS(data)
             rCls.print_results()
 

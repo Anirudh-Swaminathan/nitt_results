@@ -19,15 +19,7 @@ class ResultScraper(object):
         self.response = None
 
     def __fetchData(self):
-        """Function to fetch data using a post request
-        
-        # Arguments
-            postData - dictionary
-                Data to be sent via POST request
-
-        # Returns
-            response - Response to the request
-        """
+        """Function to fetch data using a post request"""
         headers = dict()
         headers["referer"] = """https://delta.nitt.edu/\
                 results/checkResult.html"""

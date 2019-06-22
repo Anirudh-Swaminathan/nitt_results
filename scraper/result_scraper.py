@@ -44,11 +44,12 @@ class ResultScraper(object):
         table_list = soup.find_all('table')
 
         if len(table_list) == 0:
-            self.response = soup.prettify()
+            err_mess = soup.find_all('div', {'role', 'alert'})
+            self.response = err_mess[0].text
             return
 
         table = table_list[0]
-        self.response = ""
+        self.response = "\nRoll  Number: " + self.postData["uname"]
 
         # For each table row, we now process
         for tr in table.find_all('tr'):
@@ -61,6 +62,11 @@ class ResultScraper(object):
             # For each data(column) in this row, add it to the response
             for td in tr.find_all('td'):
                 self.response += td.text + "\t"
+
+        # Print the GPA and the CGPA on separate lines
+        gpa_data = soup.find_all('span', {'class', 'gpa'})
+        for gpa in gpa_data:
+            self.response += "\n" + gpa.text
 
 
     def print_results(self):

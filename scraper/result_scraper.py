@@ -89,3 +89,12 @@ class ResultScraper(object):
         else:
             print(self.t1)
             print(self.t2)
+
+    def save_to_file(self):
+        """Function to save the data to file"""
+        if self.t1 is not None and self.t2 is not None:
+            with open(self.postData["uname"] + "_semester_results.txt", "w") as f:
+                f.write(self.t1.get_string())
+                f.write("\n")
+            with open(self.postData["uname"] + "_semester_results.txt", "a") as f:
+                f.write(self.t2.get_string())

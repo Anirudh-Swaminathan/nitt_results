@@ -6,19 +6,24 @@ The original site for checking results is [here](https://delta.nitt.edu/results/
 ### Requirements
 - python 3
 - requests
+- bs4 (BeautifulSoup)
+- PTable (PrettyTable)
 
 ### Usage
 1. Download this whole repository
 2. Install the requirements given above
+    ```bash
+    pip install -r requirements.txt
+    ```
 3. Change your directory to the root folder
 4. Run the following command
-```python
+```bash
 python scrape_it.py -r <your_roll_number>
 ```
 Enter your password in the hidden prompt and hit enter.
 
 Also
-```python
+```bash
 python scrape_it.py -h
 ```
 can be used to display the help message to use this script.

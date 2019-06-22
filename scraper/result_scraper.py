@@ -3,6 +3,8 @@
 import requests
 from warnings import catch_warnings, filterwarnings
 from bs4 import BeautifulSoup
+from prettytable import PrettyTable
+
 
 class ResultScraper(object):
     """Class for scraping results
@@ -10,6 +12,7 @@ class ResultScraper(object):
     This class contains all the methods for scraping the delta results page
     and then displaying the results on the terminal
     """
+
     def __init__(self, postData):
         """Constructor
         
@@ -30,11 +33,11 @@ class ResultScraper(object):
         with catch_warnings():
             filterwarnings("ignore")
             r = requests.post(
-                    "https://delta.nitt.edu/results/results.php",
-                    headers=headers,
-                    data=self.postData,
-                    verify=False
-                    )
+                "https://delta.nitt.edu/results/results.php",
+                headers=headers,
+                data=self.postData,
+                verify=False
+            )
         self.htmlText = r.text
 
     def __parseFetchData(self):
@@ -49,28 +52,40 @@ class ResultScraper(object):
             return
 
         table = table_list[0]
-        self.response = "\nRoll  Number: " + self.postData["uname"]
 
+        # The table containing the details of grades
+        self.t1 = PrettyTable()
+        self.t1.title = "Roll Number: " + self.postData["uname"]
+
+        # The table containing the detials of the GPA and CGPA
+        self.t2 = PrettyTable()
+        self.t2.title = "GPA details"
+
+        sub_name = None
         # For each table row, we now process
         for tr in table.find_all('tr'):
-            self.response += "\n"
-
             # If there is a header
-            for th in tr.find_all('th'):
-                self.response += th.text + "\t"
+            if len(tr.find_all('th')):
+                self.t1.field_names = [th.text for th in tr.find_all('th')]
+                sub_name = [th.text for th in tr.find_all('th')][1]
 
-            # For each data(column) in this row, add it to the response
-            for td in tr.find_all('td'):
-                self.response += td.text + "\t"
+            else:
+                # For each data(column) in this row, add it to the response
+                self.t1.add_row([td.text for td in tr.find_all('td')])
 
-        # Print the GPA and the CGPA on separate lines
+        self.t1.align[sub_name] = "l"
+
+        # Print the GPA and the CGPA as a separate table
         gpa_data = soup.find_all('span', {'class', 'gpa'})
-        for gpa in gpa_data:
-            self.response += "\n" + gpa.text
-
+        self.t2.field_names = ["GPA", "CGPA"]
+        self.t2.add_row([gpa.text.split(":")[1] for gpa in gpa_data])
 
     def print_results(self):
         """Function to print the data on the terminal"""
         self.__fetchData()
         self.__parseFetchData()
-        print(self.response)
+        if self.response is not None:
+            print(self.response)
+        else:
+            print(self.t1)
+            print(self.t2)
